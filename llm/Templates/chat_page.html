@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App</title>
+</head>
+<body>
+
+<h2>AI Chat</h2>
+
+<div id="chat-box" style="border:1px solid black; height:300px; overflow:auto; padding:10px;">
+</div>
+
+<br>
+
+<input type="text" id="message-input" placeholder="Type message..." />
+<button onclick="sendMessage()">Send</button>
+
+<script>
+function sendMessage() {
+    let input = document.getElementById("message-input");
+    let message = input.value;
+
+    if (!message.trim()) return;
+
+    let chatBox = document.getElementById("chat-box");
+
+    chatBox.innerHTML += `<div>You: ${message}</div>`;
+
+    
+    fetch(`/send_message/1/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: `message=${encodeURIComponent(message)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        
+        chatBox.innerHTML += `<div>Bot: ${data.reply}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+   
+    input.value = "";
+}
+</script>
+
+</body>
+</html>

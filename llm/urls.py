@@ -1,5 +1,6 @@
 from django.urls import path
 from llm import views
 urlpatterns = [
-   path('',views.home,name='home'),
+    
+  path('send_message/<int:chat_id>/',views.send_message, name='home'),
 ]
