@@ -10,10 +10,13 @@ def create_chat(request):
     
     Chat=chat.objects.create(user=request.user)
 
-    return render (request,'home.html',Chat_id=Chat.id)
+    return JsonResponse({
+            "chat_id": chat.id
+        })
 
-def chat_page(request,Chat_id):
-    Chat =get_object_or_404(chat,id=Chat_id)
+
+def chat_page(request,chat_id):
+    Chat =get_object_or_404(chat,id=chat_id)
     Message=message.objects.filter(Chat=Chat)
     return render (request,'chat_page.html',{
         'Chat':Chat,

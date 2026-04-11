@@ -1,21 +1,63 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Chat App</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 
-<h2>AI Chat</h2>
+<div class="container">
 
-<div id="chat-box" style="border:1px solid black; height:300px; overflow:auto; padding:10px;">
+   
+    <div class="sidebar">
+        <button class="new-chat-btn" onclick="createChat()">+ New Chat</button>
+
+        <div class="chat-history" id="chat-history">
+          
+        </div>
+    </div>
+
+    
+    <div class="chat-area">
+
+        <div class="chat-box" id="chat-box"></div>
+
+        <div class="input-area">
+            <input type="text" id="message-input" placeholder="Type message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+    </div>
+
 </div>
 
-<br>
-
-<input type="text" id="message-input" placeholder="Type message..." />
-<button onclick="sendMessage()">Send</button>
-
 <script>
+let currentChatId = 1;
+let chatCount = 1;
+
+
+function createChat() {
+    chatCount++;
+    currentChatId = chatCount;
+
+    let history = document.getElementById("chat-history");
+
+    let chatItem = document.createElement("div");
+    chatItem.className = "chat-item";
+    chatItem.innerText = "Chat " + chatCount;
+
+    chatItem.onclick = function() {
+        currentChatId = chatCount;
+        document.getElementById("chat-box").innerHTML = "";
+    };
+
+    history.appendChild(chatItem);
+
+    document.getElementById("chat-box").innerHTML = "";
+}
+
+
 function sendMessage() {
     let input = document.getElementById("message-input");
     let message = input.value;
@@ -24,10 +66,10 @@ function sendMessage() {
 
     let chatBox = document.getElementById("chat-box");
 
-    chatBox.innerHTML += `<div>You: ${message}</div>`;
+   
+    chatBox.innerHTML += `<div class="message user">You: ${message}</div>`;
 
-    
-    fetch(`/send_message/1/`, {
+    fetch(`/send_message/${currentChatId}/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -35,14 +77,12 @@ function sendMessage() {
         },
         body: `message=${encodeURIComponent(message)}`
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-        
-        chatBox.innerHTML += `<div>Bot: ${data.reply}</div>`;
+        chatBox.innerHTML += `<div class="message bot">Bot: ${data.reply}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
     });
 
-   
     input.value = "";
 }
 </script>
