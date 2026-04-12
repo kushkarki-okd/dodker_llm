@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect,get_object_or_404
+from django.contrib.auth import authenticate ,login as auth_login
 import requests
 from .models import chat,message
 from django.http import JsonResponse
+from .forms import signupform,loginform
 
 def create_chat(request):
 
@@ -74,3 +76,35 @@ def send_message(request, chat_id):
     return JsonResponse({
         "reply": ai_reply
     })
+
+
+def signup(request):
+
+    if request.method=='POST':
+        form = signupform(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        
+        form=signupform()
+
+    return render(request, 'signup.html',{'form':form})
+
+
+
+def login(request):
+    if request.method=='POST':
+        form=loginform(request.POST)
+        if form.is_valid():
+            user = form.get_user() 
+            if user is not None:
+
+                auth_login(request,user)
+                Chat = chat.objects.create(user=user)  
+                return redirect('chat_page', chat_id=Chat.id)  
+
+    else:
+        form=loginform()    
+    return render(request,'login.html',{'form':form})
+        

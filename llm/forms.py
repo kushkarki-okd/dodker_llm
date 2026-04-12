@@ -3,31 +3,31 @@ from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from django.contrib.auth.models import User
 
 class signupform(UserCreationForm):
-    Name=forms.CharField(
-        label="Name",
+    username=forms.CharField(
+        label="username",
         widget=forms.TextInput(attrs={'placeholder':'Enter your Name'})
     )
-    password=forms.CharField(
+    password1=forms.CharField(
         label="password",
         widget=forms.PasswordInput(attrs={'placeholder':'Enter your password'})
     )
-    conf_password=forms.CharField(
+    password2=forms.CharField(
         label="conf-password",
         widget=forms.PasswordInput(attrs={'placeholder':'Enter your conform-password'})
     )
-    Email=forms.CharField(
-        label="Email",
+    email=forms.EmailField (
+        label="email",
         widget=forms.EmailInput(attrs={'placeholder':'Enter your email'})
     )
 
     class Meta:
         model=User 
-        fields=['Name','password','conf_password','Email']
+        fields=['username','password1','password2','email']
 
 
 
 class loginform(AuthenticationForm):
-    Name=forms.CharField(
+    username=forms.CharField(
         label="Name",
         widget=forms.TextInput(attrs={'placeholder':'enter your name'})
     )
