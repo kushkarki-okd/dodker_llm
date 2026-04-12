@@ -1,14 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/signup.css' %}">
     <title>Document</title>
+    
 </head>
 <body>
     <form enctype="multipart/form-data" method="POST">
         {% csrf_token %}
-        <div class="form-container">
+        <div class="login-container">
             <h2>signup here</h2>
             <div class="input-container">
                {{form.as_p}}
@@ -16,6 +19,9 @@
             </div>
             <div class="button">
                 <button type="submit">signup</button>
+            </div>
+            <div class="login-footer">
+                Don’t have an account? <a href="{% url "login" %}">Signup</a>
             </div>
         </div>
     </form>

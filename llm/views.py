@@ -19,7 +19,7 @@ def create_chat(request):
 
 def chat_page(request,chat_id):
     Chat =get_object_or_404(chat,id=chat_id)
-    Message=message.objects.filter(Chat=Chat)
+    Message=message.objects.filter(chat=Chat)
     return render (request,'chat_page.html',{
         'Chat':Chat,
         'Message':Message
@@ -95,10 +95,12 @@ def signup(request):
 
 def login(request):
     if request.method=='POST':
-        form=loginform(request.POST)
+        form = loginform(request, data=request.POST)
         if form.is_valid():
+            print('form is valied')
             user = form.get_user() 
             if user is not None:
+                print ('login successful')
 
                 auth_login(request,user)
                 Chat = chat.objects.create(user=user)  
