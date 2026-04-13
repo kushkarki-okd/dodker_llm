@@ -1,4 +1,4 @@
-/* Reset */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +6,7 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* Layout */
+
 body {
     height: 100vh;
     background: #0f172a;
@@ -18,7 +18,6 @@ body {
     height: 100vh;
 }
 
-/* 🔹 Sidebar */
 .sidebar {
     width: 260px;
     background: #020617;
@@ -28,7 +27,7 @@ body {
     border-right: 1px solid #1e293b;
 }
 
-/* New chat button */
+
 .new-chat-btn {
     background: #1d4ed8;
     border: none;
@@ -45,13 +44,12 @@ body {
     background: #2563eb;
 }
 
-/* Chat history */
+
 .chat-history {
     flex: 1;
     overflow-y: auto;
 }
 
-/* Chat item */
 .chat-item {
     padding: 10px;
     margin-bottom: 8px;
@@ -65,7 +63,6 @@ body {
     background: #1e293b;
 }
 
-/* 🔹 Chat Area */
 .chat-area {
     flex: 1;
     display: flex;
@@ -73,7 +70,6 @@ body {
     background: #020617;
 }
 
-/* Chat messages */
 .chat-box {
     flex: 1;
     padding: 20px;
@@ -90,20 +86,19 @@ body {
     line-height: 1.4;
 }
 
-/* User message (right) */
+
 .message.user {
     background: #2563eb;
     margin-left: auto;
     text-align: right;
 }
 
-/* Bot message (left) */
 .message.bot {
     background: #1e293b;
     margin-right: auto;
 }
 
-/* 🔹 Input Area */
+
 .input-area {
     display: flex;
     padding: 15px;
@@ -111,7 +106,7 @@ body {
     background: #020617;
 }
 
-/* Input */
+
 .input-area input {
     flex: 1;
     padding: 12px;
@@ -123,7 +118,7 @@ body {
     margin-right: 10px;
 }
 
-/* Button */
+
 .input-area button {
     padding: 12px 18px;
     border: none;
@@ -138,7 +133,7 @@ body {
     background: #2563eb;
 }
 
-/* Scrollbar (optional nice look) */
+
 .chat-history::-webkit-scrollbar,
 .chat-box::-webkit-scrollbar {
     width: 6px;

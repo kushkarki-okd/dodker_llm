@@ -6,7 +6,7 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* Full screen center */
+
 body {
     height: 100vh;
     background: linear-gradient(135deg, #0f172a, #1e293b);
@@ -15,7 +15,6 @@ body {
     align-items: center;
 }
 
-/* Card */
 .login-container {
     background: #111827;
     padding: 40px;
@@ -25,13 +24,12 @@ body {
     color: white;
 }
 
-/* Title */
+
 .login-container h2 {
     text-align: center;
     margin-bottom: 25px;
 }
 
-/* Inputs */
 .login-container input {
     width: 100%;
     padding: 12px;

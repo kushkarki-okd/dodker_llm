@@ -9,19 +9,29 @@
 
 <div class="container">
 
-   
-    <div class="sidebar">
-        <button class="new-chat-btn" onclick="createChat()">+ New Chat</button>
 
-        <div class="chat-history" id="chat-history">
-          
+    <div class="sidebar">
+        <button onclick="createChat()">+ New Chat</button>
+
+        <div class="chat-list">
+            {% for chat in chats %}
+                <div id="chat-item-{{ chat.id }}" onclick="loadChat({{ chat.id }})">
+                    {{ chat.title }}
+                </div>
+            {% endfor %}
         </div>
     </div>
 
     
     <div class="chat-area">
 
-        <div class="chat-box" id="chat-box"></div>
+        <div id="chat-box" class="chat-box">
+            {% for msg in messages %}
+                <div class="message {{ msg.sender }}">
+                    {{ msg.sender }}: {{ msg.content }}
+                </div>
+            {% endfor %}
+        </div>
 
         <div class="input-area">
             <input type="text" id="message-input" placeholder="Type message...">
@@ -33,41 +43,36 @@
 </div>
 
 <script>
-let currentChatId = 1;
-let chatCount = 1;
-
+    let currentChatId = {{ current_chat.id|default:"null" }};
 
 function createChat() {
-    chatCount++;
-    currentChatId = chatCount;
-
-    let history = document.getElementById("chat-history");
-
-    let chatItem = document.createElement("div");
-    chatItem.className = "chat-item";
-    chatItem.innerText = "Chat " + chatCount;
-
-    chatItem.onclick = function() {
-        currentChatId = chatCount;
-        document.getElementById("chat-box").innerHTML = "";
-    };
-
-    history.appendChild(chatItem);
-
-    document.getElementById("chat-box").innerHTML = "";
+    fetch("/create_chat/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        window.location.href = `/chat/${data.chat_id}/`;
+    });
 }
 
+function loadChat(chatId) {
+    window.location.href = `/chat/${chatId}/`;
+}
 
 function sendMessage() {
     let input = document.getElementById("message-input");
-    let message = input.value;
-
-    if (!message.trim()) return;
+    let message = input.value.trim();
+    if (!message) return;
 
     let chatBox = document.getElementById("chat-box");
 
-   
     chatBox.innerHTML += `<div class="message user">You: ${message}</div>`;
+    input.value = "";
+    chatBox.scrollTop = chatBox.scrollHeight;
 
     fetch(`/send_message/${currentChatId}/`, {
         method: "POST",
@@ -81,9 +86,12 @@ function sendMessage() {
     .then(data => {
         chatBox.innerHTML += `<div class="message bot">Bot: ${data.reply}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
-    });
 
-    input.value = "";
+        if (data.is_first_message) {
+            let item = document.getElementById("chat-item-" + currentChatId);
+            if (item) item.innerText = data.chat_title;
+        }
+    });
 }
 </script>
 
