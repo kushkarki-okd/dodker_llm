@@ -55,12 +55,12 @@ function createChat() {
     })
     .then(res => res.json())
     .then(data => {
-        window.location.href = `/chat/${data.chat_id}/`;
+        window.location.href = `/chat_page/${data.chat_id}/`;
     });
 }
 
 function loadChat(chatId) {
-    window.location.href = `/chat/${chatId}/`;
+    window.location.href = `/chat_page/${chatId}/`;
 }
 
 function sendMessage() {

@@ -7,76 +7,85 @@ from .forms import signupform,loginform
 
 def create_chat(request):
 
-    if request.user.is_authentacated:
+    if not request.user.is_authenticated:
         return redirect('login')
     
     Chat=chat.objects.create(user=request.user)
 
     return JsonResponse({
-            "chat_id": chat.id
+            "chat_id": Chat.id
         })
 
+def chat_page(request, chat_id):
+    from .models import chat as ChatModel, message as MessageModel
 
-def chat_page(request,chat_id):
-    Chat =get_object_or_404(chat,id=chat_id)
-    Message=message.objects.filter(chat=Chat)
-    return render (request,'chat_page.html',{
-        'Chat':Chat,
-        'Message':Message
+    Chat = get_object_or_404(ChatModel, id=chat_id)
+    all_chats = ChatModel.objects.filter(user=request.user).order_by('-created_at')  # ← for sidebar
+    Messages = MessageModel.objects.filter(chat=Chat).order_by('created_at')
+
+    return render(request, 'chat_page.html', {
+        'chats': all_chats,      
+        'messages': Messages,    
+        'current_chat': Chat     
     })
-
 
 def send_message(request, chat_id):
 
-    # yesla ceh ai lai help hos further predict garna lai vanera history ba ta message linxa 
-    chat = get_object_or_404(chat, id=chat_id, user=request.user)
+    Chat = get_object_or_404(chat, id=chat_id, user=request.user)
 
-    # get user message
     user_input = request.POST.get('message')
 
+    if not user_input:
+        return JsonResponse({"error": "Empty message"})
 
+    # Save user message
     message.objects.create(
-        chat=chat,
+        chat=Chat,
         sender="user",
-        text=user_input
+        content=user_input
     )
-# yeslaey database bata filter garca caht id ame retrive garxa latest to old
-    msgs = message.objects.filter(chat=chat).order_by('-created_at')[:5]
-    msgs = reversed(msgs)  # correct order ma reverse garxa because llm le bujdina so old to latest ma change garaxa
- #yesle che prompt banaunxa hai tw 
+    if message.objects.filter(chat=Chat).count() == 1:
+        Chat.title=user_input[:30]
+        Chat.save()
+
+    
+    msgs = message.objects.filter(chat=Chat).order_by('-created_at')[:5]
+    msgs = reversed(msgs)
+
     prompt = "You are a helpful assistant.\n\n"
 
     for m in msgs:
         if m.sender == "user":
-            prompt += f"User: {m.text}\n"
+            prompt += f"User: {m.content}\n"
         else:
-            prompt += f"Assistant: {m.text}\n"
+            prompt += f"Assistant: {m.content}\n"
 
     prompt += "Assistant:"
 
-  #backend ma ollama lai pathauxa hai tw 
-    response = requests.post(
-        "http://localhost:11434/api/generate",
-        json={
-            "model": "mistral",
-            "prompt": prompt,
-            "stream": False
-        }
-    )
-#ai le replay denxa 
-    ai_reply = response.json()['response']
+    try:
+        response = requests.post(
+            "http://localhost:11434/api/generate",
+            json={
+                "model": "mistral",
+                "prompt": prompt,
+                "stream": False
+            }
+        )
+        ai_reply = response.json().get('response', 'No reply')
+    except:
+        ai_reply = "AI Error"
 
-#tyo ai tko replay save garxa 
+    # Save bot reply
     message.objects.create(
-        chat=chat,
+        chat=Chat,
         sender="bot",
-        text=ai_reply
+        content=ai_reply
     )
 
     return JsonResponse({
-        "reply": ai_reply
+        "reply": ai_reply,
+        'chat_title':Chat.title
     })
-
 
 def signup(request):
 
