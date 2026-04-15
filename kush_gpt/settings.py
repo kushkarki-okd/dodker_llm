@@ -77,11 +77,11 @@ WSGI_APPLICATION = 'kush_gpt.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'llm',
-        'PASSWORD':'lovkush',
-        'USER':'postgres',
-        'HOST':'localhost',
-        'PORT':'5432',
+        'NAME': os.getenv('POSTGRES_DB'),
+        'PASSWORD':os.getenv('POSTGRES_PASSWORD'),
+        'USER':os.getenv('POSTGRES_USER'),
+        'HOST':os.getenv('POSTGRES_HOST'),
+        'PORT':os.getenv('POSTGRES_PORT'),
     }
 }
 
