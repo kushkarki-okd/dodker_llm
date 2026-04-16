@@ -5,7 +5,7 @@ services:
   web:
     build: .
     container_name: llm
-    command: sh -c "py manage.py makemigrations && py manage.py runserver 0.0.0.0:8000"
+    command: sh -c "python manage.py makemigrations && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     env_file:
@@ -30,7 +30,7 @@ services:
     image: ollama/ollama
     ports:
       - "11434:11434"
-    restart: always"
+    restart: always
     volumes:
       - ollama_data:/root/.ollama
 

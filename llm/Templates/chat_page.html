@@ -70,7 +70,7 @@ function sendMessage() {
 
     let chatBox = document.getElementById("chat-box");
 
-    chatBox.innerHTML += `<div class="message user">You: ${message}</div>`;
+    chatBox.innerHTML += `<div class="message user"> ${message}</div>`;
     input.value = "";
     chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -84,7 +84,7 @@ function sendMessage() {
     })
     .then(res => res.json())
     .then(data => {
-        chatBox.innerHTML += `<div class="message bot">Bot: ${data.reply}</div>`;
+        chatBox.innerHTML += `<div class="message bot"> ${data.reply}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
 
         if (data.is_first_message) {

@@ -70,7 +70,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'kush_gpt.wsgi.application'
 
-
+import os
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 

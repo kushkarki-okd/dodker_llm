@@ -64,7 +64,7 @@ def send_message(request, chat_id):
 
     try:
         response = requests.post(
-            "http://localhost:11434/api/generate",
+            "http://ollama:11434/api/generate",
             json={
                 "model": "mistral",
                 "prompt": prompt,
@@ -72,8 +72,8 @@ def send_message(request, chat_id):
             }
         )
         ai_reply = response.json().get('response', 'No reply')
-    except:
-        ai_reply = "AI Error"
+    except Exception as e:
+        ai_reply = str(e)
 
     # Save bot reply
     message.objects.create(

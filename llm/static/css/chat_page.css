@@ -1,11 +1,9 @@
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Segoe UI', sans-serif;
 }
-
 
 body {
     height: 100vh;
@@ -18,6 +16,7 @@ body {
     height: 100vh;
 }
 
+
 .sidebar {
     width: 260px;
     background: #020617;
@@ -26,7 +25,6 @@ body {
     flex-direction: column;
     border-right: 1px solid #1e293b;
 }
-
 
 .new-chat-btn {
     background: #1d4ed8;
@@ -37,13 +35,7 @@ body {
     cursor: pointer;
     margin-bottom: 15px;
     font-weight: bold;
-    transition: 0.3s;
 }
-
-.new-chat-btn:hover {
-    background: #2563eb;
-}
-
 
 .chat-history {
     flex: 1;
@@ -55,13 +47,8 @@ body {
     margin-bottom: 8px;
     background: #0f172a;
     border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
 }
 
-.chat-item:hover {
-    background: #1e293b;
-}
 
 .chat-area {
     flex: 1;
@@ -74,30 +61,36 @@ body {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
-}
 
-/* Message base */
+    display: flex;              
+    flex-direction: column;   
+} 
+
 .message {
     max-width: 60%;
     padding: 10px 14px;
-    margin-bottom: 10px;
-    border-radius: 10px;
+    margin: 6px 0;
+    border-radius: 15px;
     font-size: 14px;
     line-height: 1.4;
+    display: inline-block;
+    word-wrap: break-word;
 }
-
 
 .message.user {
-    background: #2563eb;
-    margin-left: auto;
-    text-align: right;
+    background-color: #2563eb;
+    color: white;
+    align-self: flex-end;  /* 🔥 RIGHT */
+    border-radius: 15px 15px 0 15px;
 }
+
 
 .message.bot {
-    background: #1e293b;
-    margin-right: auto;
+    background-color: #1e293b;
+    color: white;
+    align-self: flex-start; /* 🔥 LEFT */
+    border-radius: 15px 15px 15px 0;
 }
-
 
 .input-area {
     display: flex;
@@ -105,7 +98,6 @@ body {
     border-top: 1px solid #1e293b;
     background: #020617;
 }
-
 
 .input-area input {
     flex: 1;
@@ -118,7 +110,6 @@ body {
     margin-right: 10px;
 }
 
-
 .input-area button {
     padding: 12px 18px;
     border: none;
@@ -126,21 +117,4 @@ body {
     background: #1d4ed8;
     color: white;
     cursor: pointer;
-    transition: 0.3s;
-}
-
-.input-area button:hover {
-    background: #2563eb;
-}
-
-
-.chat-history::-webkit-scrollbar,
-.chat-box::-webkit-scrollbar {
-    width: 6px;
-}
-
-.chat-history::-webkit-scrollbar-thumb,
-.chat-box::-webkit-scrollbar-thumb {
-    background: #1e293b;
-    border-radius: 10px;
 }
